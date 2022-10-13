@@ -42,13 +42,13 @@ class HomeController extends Controller
         $image_to_remove = null;
         if(isset($request->image)){
             $imageName = time().'.'.$request->image->extension();  
-            $request->image->move(public_path('img'), $imageName);
+            $request->image->move(public_path('img/about'), $imageName);
             $image_to_remove = $about->image;
         }
 
         $about->title = $request->title;
         $about->description = $request->description;
-        $about->image = isset($request->image) ? 'img/' . $imageName : $about->image;
+        $about->image = isset($request->image) ? 'img/about/' . $imageName : $about->image;
         $about->save();
 
         if($image_to_remove != null){
