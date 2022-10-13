@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\About;
+use App\Models\Brand;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -56,5 +57,28 @@ class HomeController extends Controller
         }
 
         return redirect()->route('about');
+    }
+
+    public function brands()
+    {
+        $brands = Brand::all();
+        return view('brands', compact('brands'));
+    }
+
+    public function addBrand(Request $request)
+    {
+        $brand = new Brand();
+
+        // storing_image
+        if(isset($request->image)){
+            $imageName = time().'.'.$request->image->extension();  
+            $request->image->move(public_path('img/brand'), $imageName);
+        }
+
+        $brand->name = $request->name;
+        $brand->image = isset($request->image) ? 'img/brand/' . $imageName : $brand->image;
+        $brand->save();
+
+        return redirect()->route('brands');
     }
 }

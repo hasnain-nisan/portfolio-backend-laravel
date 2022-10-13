@@ -25,6 +25,10 @@ Auth::routes([
 ]);
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 Route::get('/about', [App\Http\Controllers\HomeController::class, 'about'])->name('about');
 Route::post('/about', [App\Http\Controllers\HomeController::class, 'aboutPost'])->name('about-post');
+
+Route::get('/brands', [App\Http\Controllers\HomeController::class, 'brands'])->name('brands');
+Route::post('/add-brand', [App\Http\Controllers\HomeController::class, 'addBrand'])->name('add-brand');
 

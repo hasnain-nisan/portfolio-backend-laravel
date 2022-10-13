@@ -43,8 +43,8 @@
                 <div data-i18n="Tables">Abouts</div>
                 </a>
             </li>
-            <li class="menu-item">
-                <a href="tables-basic.html" class="menu-link">
+            <li class="menu-item @if (Route::currentRouteName() == 'brands') active @endif">
+                <a href="{{ route('brands') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-crown"></i>
                 <div data-i18n="Tables">Brands</div>
                 </a>
