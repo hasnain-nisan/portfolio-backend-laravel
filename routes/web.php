@@ -31,4 +31,5 @@ Route::post('/about', [App\Http\Controllers\HomeController::class, 'aboutPost'])
 
 Route::get('/brands', [App\Http\Controllers\HomeController::class, 'brands'])->name('brands');
 Route::post('/add-brand', [App\Http\Controllers\HomeController::class, 'addBrand'])->name('add-brand');
-
+Route::post('/edit-brand', [App\Http\Controllers\HomeController::class, 'editBrand'])->name('edit-brand');
+Route::post('/delete-brand', [App\Http\Controllers\HomeController::class, 'deleteBrand'])->name('delete-brand');

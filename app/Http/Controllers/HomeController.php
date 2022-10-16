@@ -81,4 +81,42 @@ class HomeController extends Controller
 
         return redirect()->route('brands');
     }
+
+    public function editBrand(Request $request)
+    {
+        $id = $request->id;
+        $image_to_remove = null;
+        $brand = Brand::find($id);
+
+        // storing_image
+        if(isset($request->image)){
+            $imageName = time().'.'.$request->image->extension();  
+            $request->image->move(public_path('img/brand'), $imageName);
+            $image_to_remove = $brand->image;
+        }
+
+        $brand->name = $request->name;
+        $brand->image = isset($request->image) ? 'img/brand/' . $imageName : $brand->image;
+        $brand->save();
+
+        if($image_to_remove != null){
+            unlink(getcwd() . '/' . $image_to_remove);
+        }
+
+        return redirect()->route('brands');
+    }
+
+    public function deleteBrand(Request $request)
+    {
+        $id = $request->id;
+        $brand = Brand::find($id);
+        $image_to_remove = $brand->image;
+
+        $brand->delete();
+
+        //remove brand image from the server
+        unlink(getcwd() . '/' . $image_to_remove);
+
+        return redirect()->route('brands');
+    }
 }
