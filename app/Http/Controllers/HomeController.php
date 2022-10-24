@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContactReply;
+use View;
 use App\Models\About;
 use App\Models\Brand;
+use App\Models\Contact;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
@@ -16,6 +20,10 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $contacts = Contact::where('is_seen', 0)->get();
+        $about = About::first();
+        View::share ( 'unread_contacts', count($contacts) );
+        View::share ( 'about', $about );
     }
 
     /**
@@ -118,5 +126,53 @@ class HomeController extends Controller
         unlink(getcwd() . '/' . $image_to_remove);
 
         return redirect()->route('brands');
+    }
+
+    public function contacts()
+    {
+        $contacts = Contact::all();
+        return view('contacts', compact('contacts'));
+    }
+
+    public function updateContact(Request $request)
+    {
+        $type = $request->type;
+        $id = $request->id;
+
+        if($type == 'is_seen'){
+            $contact = Contact::find($id);
+            if($contact->is_seen == 0){
+                $contact->is_seen = 1;
+                $contact->save();
+            }
+            $contacts = Contact::where('is_seen', 0)->get();
+            $count = count($contacts);
+            return [
+                'status' => 'success',
+                'unread_contacts' => $count
+            ];
+        }
+
+        // replying and updating contact message
+        if($type == 'is_replying'){
+            $contact = Contact::find($id);
+            
+            //send mail
+            Mail::to($contact->email)->send(new ContactReply($contact->email, $request->reply, $contact));
+            
+            //save is replied to true
+            $contact->is_replied = 1;
+            $contact->save();
+
+            return redirect()->route('contacts');
+        }
+    }
+
+    public function deleteContact(Request $request)
+    {
+        $id = $request->id;
+        $contact = Contact::find($id);
+        $contact->delete();
+        return redirect()->route('contacts');
     }
 }

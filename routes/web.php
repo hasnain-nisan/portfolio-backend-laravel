@@ -33,3 +33,7 @@ Route::get('/brands', [App\Http\Controllers\HomeController::class, 'brands'])->n
 Route::post('/add-brand', [App\Http\Controllers\HomeController::class, 'addBrand'])->name('add-brand');
 Route::post('/edit-brand', [App\Http\Controllers\HomeController::class, 'editBrand'])->name('edit-brand');
 Route::post('/delete-brand', [App\Http\Controllers\HomeController::class, 'deleteBrand'])->name('delete-brand');
+
+Route::get('/contacts', [App\Http\Controllers\HomeController::class, 'contacts'])->name('contacts');
+Route::post('/contact-update', [App\Http\Controllers\HomeController::class, 'updateContact'])->name('update-contact');
+Route::post('/delete-contact', [App\Http\Controllers\HomeController::class, 'deleteContact'])->name('delete-contact');

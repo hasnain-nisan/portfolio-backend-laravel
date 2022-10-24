@@ -49,10 +49,11 @@
                 <div data-i18n="Tables">Brands</div>
                 </a>
             </li>
-            <li class="menu-item">
-                <a href="tables-basic.html" class="menu-link">
+            <li class="menu-item @if (Route::currentRouteName() == 'contacts') active @endif">
+                <a href="{{ route('contacts') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-mail-send"></i>
                 <div data-i18n="Tables">Contact</div>
+                <span class="badge badge-center rounded-pill bg-danger" style="margin-left: 5px;" id="unreadContacts">{{ $unread_contacts }}</span>
                 </a>
             </li>
             <li class="menu-item">
