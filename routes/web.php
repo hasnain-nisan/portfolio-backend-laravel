@@ -37,3 +37,13 @@ Route::post('/delete-brand', [App\Http\Controllers\HomeController::class, 'delet
 Route::get('/contacts', [App\Http\Controllers\HomeController::class, 'contacts'])->name('contacts');
 Route::post('/contact-update', [App\Http\Controllers\HomeController::class, 'updateContact'])->name('update-contact');
 Route::post('/delete-contact', [App\Http\Controllers\HomeController::class, 'deleteContact'])->name('delete-contact');
+
+Route::get('/experiences', [App\Http\Controllers\HomeController::class, 'experiences'])->name('experiences');
+Route::post('/add-experience', [App\Http\Controllers\HomeController::class, 'addExperience'])->name('add-experience');
+Route::post('/edit-experience', [App\Http\Controllers\HomeController::class, 'editExperience'])->name('edit-experience');
+Route::post('/delete-experience', [App\Http\Controllers\HomeController::class, 'deleteExperience'])->name('delete-experience');
+
+Route::get('/skills', [App\Http\Controllers\HomeController::class, 'skills'])->name('skills');
+Route::post('/add-skill', [App\Http\Controllers\HomeController::class, 'addSkill'])->name('add-skill');
+Route::post('/edit-skill', [App\Http\Controllers\HomeController::class, 'editSkill'])->name('edit-skill');
+Route::post('/delete-skill', [App\Http\Controllers\HomeController::class, 'deleteSkill'])->name('delete-skill');

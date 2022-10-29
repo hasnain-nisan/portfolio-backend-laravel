@@ -56,14 +56,14 @@
                 <span class="badge badge-center rounded-pill bg-danger" style="margin-left: 5px;" id="unreadContacts">{{ $unread_contacts }}</span>
                 </a>
             </li>
-            <li class="menu-item">
-                <a href="tables-basic.html" class="menu-link">
+            <li class="menu-item @if (Route::currentRouteName() == 'experiences') active @endif">
+                <a href="{{ route('experiences') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-briefcase"></i>
                 <div data-i18n="Tables">Experiences</div>
                 </a>
             </li>
-            <li class="menu-item">
-                <a href="tables-basic.html" class="menu-link">
+            <li class="menu-item @if (Route::currentRouteName() == 'skills') active @endif">
+                <a href="{{ route('skills') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-fingerprint"></i>
                 <div data-i18n="Tables">Skills</div>
                 </a>

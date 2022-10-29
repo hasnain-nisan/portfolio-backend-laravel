@@ -7,6 +7,8 @@ use View;
 use App\Models\About;
 use App\Models\Brand;
 use App\Models\Contact;
+use App\Models\Experience;
+use App\Models\Skill;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -61,7 +63,9 @@ class HomeController extends Controller
         $about->save();
 
         if($image_to_remove != null){
-            unlink(getcwd() . '/' . $image_to_remove);
+            if(file_exists($image_to_remove)){
+                unlink(getcwd() . '/' . $image_to_remove);
+            }
         }
 
         return redirect()->route('about');
@@ -84,7 +88,7 @@ class HomeController extends Controller
         }
 
         $brand->name = $request->name;
-        $brand->image = isset($request->image) ? 'img/brand/' . $imageName : $brand->image;
+        $brand->image = isset($request->image) ? 'img/brand/' . $imageName : "";
         $brand->save();
 
         return redirect()->route('brands');
@@ -108,7 +112,9 @@ class HomeController extends Controller
         $brand->save();
 
         if($image_to_remove != null){
-            unlink(getcwd() . '/' . $image_to_remove);
+            if(file_exists($image_to_remove)){
+                unlink(getcwd() . '/' . $image_to_remove);
+            }
         }
 
         return redirect()->route('brands');
@@ -123,7 +129,9 @@ class HomeController extends Controller
         $brand->delete();
 
         //remove brand image from the server
-        unlink(getcwd() . '/' . $image_to_remove);
+        if(file_exists($image_to_remove)){
+            unlink(getcwd() . '/' . $image_to_remove);
+        }
 
         return redirect()->route('brands');
     }
@@ -174,5 +182,143 @@ class HomeController extends Controller
         $contact = Contact::find($id);
         $contact->delete();
         return redirect()->route('contacts');
+    }
+
+    public function experiences()
+    {
+        $experiences = Experience::orderBy('start_date', 'asc')->get();
+        return view('experiences', compact('experiences'));
+    }
+
+    public function addExperience(Request $request)
+    {
+        $experience = new Experience();
+
+        // storing_image
+        if(isset($request->image)){
+            $imageName = time().'.'.$request->image->extension();  
+            $request->image->move(public_path('img/experience'), $imageName);
+        }
+
+        $experience->company_name = $request->company_name;
+        $experience->company_logo = isset($request->image) ? 'img/experience/' . $imageName : "";
+        $experience->position = $request->company_position;
+        $experience->start_date = $request->start_date;
+        $experience->end_date = $request->end_date_radio == 'present' ? null : $request->end_date;
+        $experience->is_present = $request->end_date_radio == 'present' ? 1 : 0;
+
+        $experience->save();
+        return redirect()->route('experiences');
+    }
+
+    public function editExperience(Request $request)
+    {
+        $id = $request->id;
+        $experience = Experience::find($id);
+        $image_to_remove = null;
+
+        // storing_image
+        if(isset($request->image)){
+            $imageName = time().'.'.$request->image->extension();  
+            $request->image->move(public_path('img/experience'), $imageName);
+            $image_to_remove = $experience->company_logo;
+        }
+
+        $experience->company_name = $request->company_name;
+        $experience->company_logo = isset($request->image) ? 'img/experience/' . $imageName : $experience->company_logo;;
+        $experience->position = $request->company_position;
+        $experience->start_date = $request->start_date;
+        $experience->end_date = $request->end_date_radio == 'present' ? null : $request->end_date;
+        $experience->is_present = $request->end_date_radio == 'present' ? 1 : 0;
+        $experience->save();
+
+        if($image_to_remove != null){
+            if(file_exists($image_to_remove)){
+                unlink(getcwd() . '/' . $image_to_remove);
+            }
+        }
+
+        return redirect()->route('experiences');
+    }
+
+    public function deleteExperience(Request $request)
+    {
+        $id = $request->id;
+        $experience = Experience::find($id);
+        $image_to_remove = $experience->company_logo;
+
+        //remove brand image from the server
+        if(file_exists($image_to_remove)){
+            unlink(getcwd() . '/' . $image_to_remove);
+        }
+
+        $experience->delete();
+        return redirect()->route('experiences');
+    }
+
+    public function skills()
+    {
+        $skills = Skill::orderBy('expertise', 'desc')->get();
+        return view('skills', compact('skills'));
+    }
+
+    public function addskill(Request $request)
+    {
+        $skill = new Skill();
+
+        // storing_image
+        if(isset($request->image)){
+            $imageName = time().'.'.$request->image->extension();  
+            $request->image->move(public_path('img/skill'), $imageName);
+        }
+
+        $skill->name = $request->skill_name;
+        $skill->icon = isset($request->image) ? 'img/skill/' . $imageName : "";
+        $skill->expertise = $request->skill_expertise;
+
+        $skill->save();
+        return redirect()->route('skills');
+    }
+
+    public function editSkill(Request $request)
+    {
+        $id = $request->id;
+        $skill = Skill::find($id);
+        $image_to_remove = null;
+
+        // storing_image
+        if(isset($request->image)){
+            $imageName = time().'.'.$request->image->extension();  
+            $request->image->move(public_path('img/skill'), $imageName);
+            $image_to_remove = $skill->icon;
+        }
+
+        $skill->name = $request->skill_name;
+        $skill->icon = isset($request->image) ? 'img/skill/' . $imageName : $skill->icon;
+        $skill->expertise = $request->skill_expertise;
+        $skill->save();
+
+        if($image_to_remove != null){
+            if(file_exists($image_to_remove)){
+                unlink(getcwd() . '/' . $image_to_remove);
+            }
+        }
+
+        return redirect()->route('skills');
+    }
+
+    public function deleteSkill(Request $request)
+    {
+        $id = $request->id;
+        $skill = Skill::find($id);
+        $image_to_remove = $skill->icon;
+
+        //remove brand image from the server
+        if(file_exists($image_to_remove)){
+            unlink(getcwd() . '/' . $image_to_remove);
+        }
+
+        $skill->delete();
+        return redirect()->route('skills');
     }
 }
