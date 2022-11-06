@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Mail\ContactReply;
 use View;
 use App\Models\About;
-use App\Models\Brand;
 use App\Models\Contact;
 use App\Models\Experience;
+use App\Models\Hero;
 use App\Models\Skill;
+use App\Models\TechStack;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -36,6 +37,38 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+
+    public function hero()
+    {
+        $hero = Hero::first();
+        return view('hero', compact('hero'));
+    }
+
+    public function heroPost(Request $request)
+    {
+        $hero = Hero::first();
+        if(!$hero) $hero = new Hero();
+
+        // storing_image
+        $image_to_remove = null;
+        if(isset($request->image)){
+            $imageName = time().'.'.$request->image->extension();  
+            $request->image->move(public_path('img/hero'), $imageName);
+            $image_to_remove = $hero->image;
+        }
+
+        $hero->tags = json_encode($request->tags);
+        $hero->image = isset($request->image) ? 'img/hero/' . $imageName : $hero->image;
+        $hero->save();
+
+        if($image_to_remove != null){
+            if(file_exists($image_to_remove)){
+                unlink(getcwd() . '/' . $image_to_remove);
+            }
+        }
+
+        return redirect()->route('hero');
     }
 
     public function about()
@@ -69,71 +102,6 @@ class HomeController extends Controller
         }
 
         return redirect()->route('about');
-    }
-
-    public function brands()
-    {
-        $brands = Brand::all();
-        return view('brands', compact('brands'));
-    }
-
-    public function addBrand(Request $request)
-    {
-        $brand = new Brand();
-
-        // storing_image
-        if(isset($request->image)){
-            $imageName = time().'.'.$request->image->extension();  
-            $request->image->move(public_path('img/brand'), $imageName);
-        }
-
-        $brand->name = $request->name;
-        $brand->image = isset($request->image) ? 'img/brand/' . $imageName : "";
-        $brand->save();
-
-        return redirect()->route('brands');
-    }
-
-    public function editBrand(Request $request)
-    {
-        $id = $request->id;
-        $image_to_remove = null;
-        $brand = Brand::find($id);
-
-        // storing_image
-        if(isset($request->image)){
-            $imageName = time().'.'.$request->image->extension();  
-            $request->image->move(public_path('img/brand'), $imageName);
-            $image_to_remove = $brand->image;
-        }
-
-        $brand->name = $request->name;
-        $brand->image = isset($request->image) ? 'img/brand/' . $imageName : $brand->image;
-        $brand->save();
-
-        if($image_to_remove != null){
-            if(file_exists($image_to_remove)){
-                unlink(getcwd() . '/' . $image_to_remove);
-            }
-        }
-
-        return redirect()->route('brands');
-    }
-
-    public function deleteBrand(Request $request)
-    {
-        $id = $request->id;
-        $brand = Brand::find($id);
-        $image_to_remove = $brand->image;
-
-        $brand->delete();
-
-        //remove brand image from the server
-        if(file_exists($image_to_remove)){
-            unlink(getcwd() . '/' . $image_to_remove);
-        }
-
-        return redirect()->route('brands');
     }
 
     public function contacts()
@@ -184,10 +152,51 @@ class HomeController extends Controller
         return redirect()->route('contacts');
     }
 
+    public function technologyStack()
+    {
+        $stacks = TechStack::all();
+        return view('techstacks', compact('stacks'));
+    }
+
+    public function addTechStack(Request $request)
+    {
+        $exist = TechStack::where('name', $request->name)->first();
+        if($exist) return redirect()->route('technology-stack')->with('error', 'Technology already exists');
+        $tech = new TechStack();
+
+        // storing_image
+        if(isset($request->image)){
+            $imageName = time().'.'.$request->image->extension();  
+            $request->image->move(public_path('img/techStack'), $imageName);
+        }
+
+        $tech->name = $request->name;
+        $tech->image = isset($request->image) ? 'img/techStack/' . $imageName : "";
+
+        $tech->save();
+        return redirect()->route('technology-stack');
+    }
+
+    public function deleteTechStack(Request $request)
+    {
+        $id = $request->id;
+        $tech = TechStack::find($id);
+        $image_to_remove = $tech->image;
+
+        //remove brand image from the server
+        if(file_exists($image_to_remove)){
+            unlink(getcwd() . '/' . $image_to_remove);
+        }
+
+        $tech->delete();
+        return redirect()->route('technology-stack');
+    }
+
     public function experiences()
     {
         $experiences = Experience::orderBy('start_date', 'asc')->get();
-        return view('experiences', compact('experiences'));
+        $stacks = TechStack::all();
+        return view('experiences', compact('experiences', 'stacks'));
     }
 
     public function addExperience(Request $request)
@@ -206,6 +215,8 @@ class HomeController extends Controller
         $experience->start_date = $request->start_date;
         $experience->end_date = $request->end_date_radio == 'present' ? null : $request->end_date;
         $experience->is_present = $request->end_date_radio == 'present' ? 1 : 0;
+        $experience->tech_used = json_encode($request->used_tech);
+        $experience->key_points = $request->key_points;
 
         $experience->save();
         return redirect()->route('experiences');

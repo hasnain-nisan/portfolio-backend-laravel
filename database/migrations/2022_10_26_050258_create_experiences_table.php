@@ -21,6 +21,8 @@ return new class extends Migration
             $table->date('end_date')->nullable();
             $table->string('company_name');
             $table->string('company_logo')->nullable();
+            $table->string('tech_used');
+            $table->text('key_points');
             $table->timestamps();
         });
     }

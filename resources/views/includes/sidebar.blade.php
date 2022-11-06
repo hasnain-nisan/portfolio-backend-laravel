@@ -37,23 +37,16 @@
                 <div data-i18n="Analytics">Dashboard</div>
                 </a>
             </li>
+            <li class="menu-item @if (Route::currentRouteName() == 'hero') active @endif">
+                <a href="{{ route('hero') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-podcast"></i>
+                <div data-i18n="Analytics">Hero</div>
+                </a>
+            </li>
             <li class="menu-item @if (Route::currentRouteName() == 'about') active @endif">
                 <a href="{{ route('about') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-info-circle"></i>
                 <div data-i18n="Tables">Abouts</div>
-                </a>
-            </li>
-            <li class="menu-item @if (Route::currentRouteName() == 'brands') active @endif">
-                <a href="{{ route('brands') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-crown"></i>
-                <div data-i18n="Tables">Brands</div>
-                </a>
-            </li>
-            <li class="menu-item @if (Route::currentRouteName() == 'contacts') active @endif">
-                <a href="{{ route('contacts') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-mail-send"></i>
-                <div data-i18n="Tables">Contact</div>
-                <span class="badge badge-center rounded-pill bg-danger" style="margin-left: 5px;" id="unreadContacts">{{ $unread_contacts }}</span>
                 </a>
             </li>
             <li class="menu-item @if (Route::currentRouteName() == 'experiences') active @endif">
@@ -68,12 +61,6 @@
                 <div data-i18n="Tables">Skills</div>
                 </a>
             </li>
-            <li class="menu-item">
-                <a href="tables-basic.html" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-conversation"></i>
-                <div data-i18n="Tables">Testimonials</div>
-                </a>
-            </li>
             {{-- <li class="menu-item">
                 <a href="tables-basic.html" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-briefcase"></i>
@@ -84,6 +71,19 @@
                 <a href="tables-basic.html" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-laptop"></i>
                 <div data-i18n="Tables">Works</div>
+                </a>
+            </li>
+            <li class="menu-item @if (Route::currentRouteName() == 'technology-stack') active @endif">
+                <a href="{{ route('technology-stack') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bxs-coin-stack"></i>
+                <div data-i18n="Tables">Technology Stack</div>
+                </a>
+            </li>
+            <li class="menu-item @if (Route::currentRouteName() == 'contacts') active @endif">
+                <a href="{{ route('contacts') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-mail-send"></i>
+                <div data-i18n="Tables">Contact</div>
+                <span class="badge badge-center rounded-pill bg-danger" style="margin-left: 5px;" id="unreadContacts">{{ $unread_contacts }}</span>
                 </a>
             </li>
         </ul>

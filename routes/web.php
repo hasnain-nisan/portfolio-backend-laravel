@@ -26,17 +26,20 @@ Auth::routes([
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::get('/hero', [App\Http\Controllers\HomeController::class, 'hero'])->name('hero');
+Route::post('/hero', [App\Http\Controllers\HomeController::class, 'heroPost'])->name('hero-post');
+
 Route::get('/about', [App\Http\Controllers\HomeController::class, 'about'])->name('about');
 Route::post('/about', [App\Http\Controllers\HomeController::class, 'aboutPost'])->name('about-post');
-
-Route::get('/brands', [App\Http\Controllers\HomeController::class, 'brands'])->name('brands');
-Route::post('/add-brand', [App\Http\Controllers\HomeController::class, 'addBrand'])->name('add-brand');
-Route::post('/edit-brand', [App\Http\Controllers\HomeController::class, 'editBrand'])->name('edit-brand');
-Route::post('/delete-brand', [App\Http\Controllers\HomeController::class, 'deleteBrand'])->name('delete-brand');
 
 Route::get('/contacts', [App\Http\Controllers\HomeController::class, 'contacts'])->name('contacts');
 Route::post('/contact-update', [App\Http\Controllers\HomeController::class, 'updateContact'])->name('update-contact');
 Route::post('/delete-contact', [App\Http\Controllers\HomeController::class, 'deleteContact'])->name('delete-contact');
+
+Route::get('/technology-stack', [App\Http\Controllers\HomeController::class, 'technologyStack'])->name('technology-stack');
+Route::post('/technology-stack-add', [App\Http\Controllers\HomeController::class, 'addTechStack'])->name('add-technology-stack');
+Route::post('/technology-stack-delete', [App\Http\Controllers\HomeController::class, 'deleteTechStack'])->name('delete-technology-stack');
+
 
 Route::get('/experiences', [App\Http\Controllers\HomeController::class, 'experiences'])->name('experiences');
 Route::post('/add-experience', [App\Http\Controllers\HomeController::class, 'addExperience'])->name('add-experience');

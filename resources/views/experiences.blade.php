@@ -6,6 +6,19 @@
 
 @section('styles')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+    <style>
+        .tab-content {
+            padding: 2px 3px 2px 3px !important;
+            box-shadow: none !important;
+        }
+        .select2 {
+            width: 100% !important;
+        }
+        .ck-editor__editable {
+            min-height: 500px;
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endsection
 
 @section('content')
@@ -89,62 +102,98 @@
         <div class="modal-body">
             <form action="{{ route('add-experience') }}" method="post" enctype="multipart/form-data" id="addExperienceForm">
                 @csrf
-                <div class="row">
-                    <div class="col mb-3">
-                        <div class="d-flex align-items-center justify-content-center">
-                            <img src="{{ asset('img/upload-icon.png') }}" alt="user-avatar" class="d-block rounded" height="200" width="200" id="uploadedAvatar">
-                        </div>
-                        <div class="button-wrapper mt-4">
-                            <div class="d-flex align-items-center justify-content-center">
-                                <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
-                                    <span class="d-none d-sm-block">Upload company logo</span>
-                                    <i class="bx bx-upload d-block d-sm-none"></i>
-                                    <input onchange="showImage(event)" type="file" name="image" id="upload" class="account-file-input" hidden="" accept="image/png, image/jpeg">
-                                </label>
-                                {{-- <button type="button" class="btn btn-outline-secondary account-image-reset mb-4">
-                                    <i class="bx bx-reset d-block d-sm-none"></i>
-                                    <span class="d-none d-sm-block">Reset</span>
-                                </button> --}}
-                            </div>
-                            <p class="text-muted text-center mb-0">Allowed JPG, GIF or PNG</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col mb-3">
-                        <input type="hidden" name="id" id="id" class="form-control">
-                        <label for="nameWithTitle" class="form-label">Company Name</label>
-                        <input type="text" name="company_name" id="companyName" class="form-control" placeholder="Enter Name" required>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col mb-3">
-                        <label for="nameWithTitle" class="form-label">Position</label>
-                        <input type="text" name="company_position" id="companyPosition" class="form-control" placeholder="Enter postion" required>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col mb-3">
-                        <label for="html5-date-input" class="form-label">Start Date</label>
-                        <input class="form-control" name="start_date" type="date" value="" id="startDateInput">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col mb-3">
-                        <label for="html5-date-input" class="form-label">End Date</label>
-                        <div class="row align-items-end">
-                            <div class="col-3">
-                                <div class="form-check">
-                                    <input name="end_date_radio" class="form-check-input" type="radio" value="present" id="endDatePresent" checked="true" onclick="showEndDateInput(this)">
-                                    <label class="form-check-label" for="defaultRadio2"> Present </label>
-                                </div>
-                                <div class="form-check">
-                                    <input name="end_date_radio" class="form-check-input" type="radio" value="date" id="endDateDate" onclick="showEndDateInput(this)">
-                                    <label class="form-check-label" for="defaultRadio2"> Date </label>
+                <div class="nav-align-top">
+                    <ul class="nav nav-pills mb-3" role="tablist">
+                        <li class="nav-item">
+                            <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-top-home" aria-controls="navs-pills-top-home" aria-selected="false">
+                                Company Info
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-pills-top-messages" aria-controls="navs-pills-top-messages" aria-selected="true">
+                                Key points
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade active show" id="navs-pills-top-home" role="tabpanel">
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <img src="{{ asset('img/upload-icon.png') }}" alt="user-avatar" class="d-block rounded" height="100" width="100" id="uploadedAvatar">
+                                    </div>
+                                    <div class="button-wrapper mt-4">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+                                                <span class="d-none d-sm-block">Upload company logo</span>
+                                                <i class="bx bx-upload d-block d-sm-none"></i>
+                                                <input onchange="showImage(event)" type="file" name="image" id="upload" class="account-file-input" hidden="" accept="image/png, image/jpeg">
+                                            </label>
+                                            {{-- <button type="button" class="btn btn-outline-secondary account-image-reset mb-4">
+                                                <i class="bx bx-reset d-block d-sm-none"></i>
+                                                <span class="d-none d-sm-block">Reset</span>
+                                            </button> --}}
+                                        </div>
+                                        <p class="text-muted text-center mb-0">Allowed JPG, GIF or PNG</p>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-9">
-                                <input class="form-control d-none" name="end_date" type="date" value="" id="endDateInput">
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <input type="hidden" name="id" id="id" class="form-control">
+                                    <label for="nameWithTitle" class="form-label">Company Name</label>
+                                    <input type="text" name="company_name" id="companyName" class="form-control" placeholder="Enter Name" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <label for="nameWithTitle" class="form-label">Position</label>
+                                    <input type="text" name="company_position" id="companyPosition" class="form-control" placeholder="Enter postion" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <label for="html5-date-input" class="form-label">Start Date</label>
+                                    <input class="form-control" name="start_date" type="date" value="" id="startDateInput">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <label for="html5-date-input" class="form-label">End Date</label>
+                                    <div class="row align-items-end">
+                                        <div class="col-3">
+                                            <div class="form-check">
+                                                <input name="end_date_radio" class="form-check-input" type="radio" value="present" id="endDatePresent" checked="true" onclick="showEndDateInput(this)">
+                                                <label class="form-check-label" for="defaultRadio2"> Present </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input name="end_date_radio" class="form-check-input" type="radio" value="date" id="endDateDate" onclick="showEndDateInput(this)">
+                                                <label class="form-check-label" for="defaultRadio2"> Date </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-9">
+                                            <input class="form-control d-none" name="end_date" type="date" value="" id="endDateInput">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <label for="usedTech" class="form-label">Technology used</label>
+                                    <select id="usedTech" class="tags-multiselect form-select" name="used_tech[]" multiple="multiple" required>
+                                        @foreach ($stacks as $stack)
+                                            <option value="{{ $stack->id }}">{{ $stack->name }}</option>   
+                                        @endforeach
+                                    </select> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="navs-pills-top-messages" role="tabpanel">
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <label for="editor" class="form-label">Key points</label>
+                                    <textarea name="key_points" id="editor"></textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -192,15 +241,24 @@
 
 @section('scripts')
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/35.3.0/classic/ckeditor.js"></script>
 <script>
 
     let experiences = @json($experiences);
+    let stacks = @json($stacks);
 
     $(document).ready( function () {
         $('#myTable').DataTable();
     } );
 
-    showImage = (e) => {
+    $(".tags-multiselect").select2({
+        tags: true,
+        dropdownParent: $('#modalCenter'),
+        tokenSeparators: [',', ' ']
+    })
+
+    const showImage = (e) => {
         let file = e.currentTarget.files[0]
         var reader = new FileReader();
         
@@ -209,6 +267,12 @@
         };
         reader.readAsDataURL(file);
     }
+
+    ClassicEditor
+        .create( document.querySelector( '#editor' ), config.height = 500 )
+        .catch( error => {
+            console.error( error );
+        } );
 
     const addModal = () => {
         document.getElementById('modalCenterTitle').textContent = 'Add Experience';
