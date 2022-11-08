@@ -109,6 +109,10 @@
                     <strong>Replied:</strong>
                     <span class="badge" id="viewReplied"></span>
                 </div>
+                <div class="row d-flex mb-3 flex">
+                    <strong>Subject:</strong>
+                    <span id="viewSubject"></span>
+                </div>
                 <div class="row">
                     <strong>Message:</strong>
                     <span id="viewMessage"></span>
@@ -144,6 +148,10 @@
                 <div class="row d-flex mb-3 flex">
                     <strong>Email:</strong>
                     <span id="replyEmail"></span>
+                </div>
+                <div class="row d-flex mb-3 flex">
+                    <strong>Subject:</strong>
+                    <span id="replySubject"></span>
                 </div>
                 <div class="row mb-3">
                     <strong>Message:</strong>
@@ -210,9 +218,9 @@
 <script>
     let contacts = @json($contacts);
 
-    $(document).ready( function () {
-        $('#myTable').DataTable();
-    } );
+    // $(document).ready( function () {
+    //     $('#myTable').DataTable();
+    // } );
 
     const viewModal = (id) => {
         let contact = contacts.filter(contact => contact.id == id)[0];
@@ -220,6 +228,7 @@
         document.getElementById('viewName').textContent = contact.name
         document.getElementById('viewEmail').textContent = contact.email
         document.getElementById('viewMessage').textContent = contact.message 
+        document.getElementById('viewSubject').textContent = contact.subject 
 
         let date = new Date(contact.created_at);
         let dateString = date.toDateString();
@@ -266,6 +275,7 @@
         document.getElementById('replyName').textContent = contact.name
         document.getElementById('replyEmail').textContent = contact.email
         document.getElementById('replyMessage').textContent = contact.message 
+        document.getElementById('replySubject').textContent = contact.subject 
 
         let date = new Date(contact.created_at);
         let dateString = date.toDateString();

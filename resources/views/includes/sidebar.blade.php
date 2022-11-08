@@ -67,8 +67,8 @@
                 <div data-i18n="Tables">Work Experiences</div>
                 </a>
             </li> --}}
-            <li class="menu-item">
-                <a href="tables-basic.html" class="menu-link">
+            <li class="menu-item @if (Route::currentRouteName() == 'works') active @endif">
+                <a href="{{ route('works') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-laptop"></i>
                 <div data-i18n="Tables">Works</div>
                 </a>

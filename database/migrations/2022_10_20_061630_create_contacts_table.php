@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email');
+            $table->string('subject');
             $table->boolean('is_seen')->default(0);
             $table->boolean('is_replied')->default(0);
             $table->text('message');

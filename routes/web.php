@@ -50,3 +50,8 @@ Route::get('/skills', [App\Http\Controllers\HomeController::class, 'skills'])->n
 Route::post('/add-skill', [App\Http\Controllers\HomeController::class, 'addSkill'])->name('add-skill');
 Route::post('/edit-skill', [App\Http\Controllers\HomeController::class, 'editSkill'])->name('edit-skill');
 Route::post('/delete-skill', [App\Http\Controllers\HomeController::class, 'deleteSkill'])->name('delete-skill');
+
+Route::get('/works', [App\Http\Controllers\HomeController::class, 'works'])->name('works');
+Route::post('/add-works', [App\Http\Controllers\HomeController::class, 'addWorks'])->name('add-works');
+Route::post('/edit-works', [App\Http\Controllers\HomeController::class, 'editWorks'])->name('edit-works');
+Route::post('/delete-works', [App\Http\Controllers\HomeController::class, 'deleteWorks'])->name('delete-works');

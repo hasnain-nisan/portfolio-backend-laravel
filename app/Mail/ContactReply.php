@@ -33,7 +33,7 @@ class ContactReply extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Reply Message',
+            subject: 'Reply Message: ' . $this->contact->subject,
         );
     }
 

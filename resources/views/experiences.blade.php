@@ -17,6 +17,19 @@
         .ck-editor__editable {
             min-height: 500px;
         }
+
+        .viewDiv {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .techStackImg {
+            display: flex;
+            flex-direction: column;
+        }
     </style>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endsection
@@ -72,6 +85,9 @@
                                 </td>
                                 <td>
                                     <div class="d-flex">
+                                        <button type="button" class="btn btn-icon btn-outline-secondary" style="margin-right: 5px;" data-bs-toggle="modal" data-bs-target="#viewModal" onclick="viewModal({{ $experience->id }})">
+                                            <span class="tf-icons bx bxs-info-circle"></span>
+                                        </button>
                                         <button type="button" class="btn btn-icon btn-outline-secondary" style="margin-right: 5px;" data-bs-toggle="modal" data-bs-target="#modalCenter" onclick="editModal({{ $experience->id }})">
                                             <span class="tf-icons bx bx-edit-alt"></span>
                                         </button>
@@ -210,6 +226,35 @@
     </div>
 </div>
 
+<!-- view experience Modal -->
+<div class="modal fade" id="viewModal" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="viewModalTitle">View experience</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="viewDiv">
+                <img src="" alt="" srcset="" id="viewExImage" width="100" height="100">
+                <div class="row text-center">
+                    <h3 id="viewExCompanyName"></h3>
+                    <h5 id="viewExPosition"></h5>
+                    <span id="viewExDuration"></span>
+                </div>
+                <div id="viewExTech" style="display: flex; gap: 25px;"></div>
+                <div class="row" id="viewExKeyPoints" style="position: relative; left: -20%;"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                Close
+            </button>
+        </div>
+    </div>
+    </div>
+</div>
+
 <!-- Delete experience Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
@@ -247,6 +292,7 @@
 
     let experiences = @json($experiences);
     let stacks = @json($stacks);
+    let CKeditor = null;
 
     $(document).ready( function () {
         $('#myTable').DataTable();
@@ -267,15 +313,20 @@
         };
         reader.readAsDataURL(file);
     }
-
+    
+    //ckeditor init
     ClassicEditor
         .create( document.querySelector( '#editor' ), config.height = 500 )
+        .then(editor => {
+           CKeditor = editor
+        })
         .catch( error => {
             console.error( error );
         } );
 
     const addModal = () => {
         document.getElementById('modalCenterTitle').textContent = 'Add Experience';
+        CKeditor.setData("")
     }
 
     const showEndDateInput = (el) => {
@@ -286,6 +337,32 @@
             document.getElementById('endDateDate').checked = false;
             document.getElementById('endDateInput').classList.add('d-none');
         }
+    }
+
+    const viewModal = (id) => {
+        let experience = experiences.filter(experience => experience.id == id)[0];
+        var host = window.location.protocol + "//" + window.location.host;
+        document.getElementById('viewExImage').src = host + "/" + experience.company_logo;
+        document.getElementById('viewExCompanyName').textContent = experience.company_name;
+        document.getElementById('viewExPosition').textContent = experience.position;
+
+        if(experience.is_present === 1){
+            document.getElementById('viewExDuration').textContent = experience.start_date + " - " + 'present';
+        } else {
+            document.getElementById('viewExDuration').textContent = experience.start_date + " - " + experience.end_date;
+        }
+
+        document.getElementById('viewExKeyPoints').innerHTML = experience.key_points;
+        
+        let techStack = "";
+        experience.tech_stacks.forEach(element => {
+            techStack += `<div class="techStackImg"><img src="${host + "/" + element.image}" alt="" srcset="" id="viewExImage" width="50" height="50" 
+                data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="right" data-bs-html="true" title="${element.name}" 
+                data-bs-original-title="<span>${element.name}</span>" />
+                <span>${element.name}</span></div>`
+        });
+
+        document.getElementById('viewExTech').innerHTML = techStack
     }
 
     const editModal = (id) => {
@@ -311,6 +388,15 @@
         }
 
         document.getElementById('addExperienceForm').action = "{{ route('edit-experience') }}"
+
+        let exStack = JSON.parse(experience.tech_used);
+        let options = "";
+        stacks.forEach(stack => {
+            options += `<option value="${stack.id}" ${exStack.includes(JSON.stringify(stack.id)) && 'selected'}>${stack.name}</option>`
+        })
+
+        document.getElementById('usedTech').innerHTML = options
+        CKeditor.setData(experience.key_points)
     }
 
     const deleteModal = (id) => {
