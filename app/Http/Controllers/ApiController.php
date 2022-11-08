@@ -33,12 +33,14 @@ class ApiController extends Controller
             $works[$key] = (new HomeController)->techStackToExperience($work);
         }
 
+
         return response([
             "hero" => $hero,
             "about" => $about,
             "skills" => $skills,
             "experiences" => $experiences,
-            "works" => $works
+            "works" => $works,
+            "url" => url('/')
         ], 200);
     }
 }
