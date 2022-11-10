@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\About;
+use App\Models\Contact;
 use App\Models\Experience;
 use App\Models\Hero;
 use App\Models\Skill;
@@ -41,6 +42,27 @@ class ApiController extends Controller
             "experiences" => $experiences,
             "works" => $works,
             "url" => url('/')
+        ], 200);
+    }
+
+    public function addContactMessage (Request $request)
+    {
+        $token = $request->token;
+
+        if($token !== $this->token){
+            return response("Unauthorized", 401);
+        }
+
+        $contact = new Contact();
+        $contact->name = $request->name;
+        $contact->email = $request->email;
+        $contact->subject = $request->subject;
+        $contact->message = $request->message;
+        $contact->save();
+
+        return response([
+            "success" => true,
+            "message" => "Message sent successfully"
         ], 200);
     }
 }

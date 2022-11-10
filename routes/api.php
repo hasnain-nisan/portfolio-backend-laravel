@@ -19,3 +19,4 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::post('/get-all-data', [App\Http\Controllers\ApiController::class, 'getAllData']);
+Route::post('/add-contact-message', [App\Http\Controllers\ApiController::class, 'addContactMessage']);
